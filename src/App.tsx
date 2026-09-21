@@ -3,7 +3,6 @@ import {
   Database,
   Server,
   ExternalLink,
-  FileText,
 } from "lucide-react";
 
 interface Project {
