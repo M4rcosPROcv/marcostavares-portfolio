@@ -1,3 +1,4 @@
+import { useState } from "react";
 import {
   Terminal,
   Code2,
@@ -12,6 +13,10 @@ import {
   Trophy,
   Cloud,
   ArrowUp,
+  Users,
+  Lock,
+  Menu,
+  X,
 } from "lucide-react";
 
 interface Project {
@@ -22,6 +27,9 @@ interface Project {
   highlights: string[];
   tech: string[];
   repoUrl?: string;
+  image?: string;
+  windowTitle?: string;
+  isMobile?: boolean;
 }
 
 interface Skill {
@@ -34,6 +42,8 @@ const projects: Project[] = [
     title: "HGP Automated Intake Pipeline",
     badge: "Applied AI / Desktop Engine",
     affiliation: "ACSGW Co-op",
+    image: "/projects/intake-preview.png",
+    windowTitle: "intake-pipeline-v1.0.exe",
     description:
       "Desktop intake pipeline automating high-volume handwritten/printed form parsing, validation, and database ingestion.",
     highlights: [
@@ -47,6 +57,8 @@ const projects: Project[] = [
     title: "My South Church Workspace API",
     badge: "Cloud Auth & Directory",
     affiliation: "Production Project",
+    image: "/projects/my-south-church.png",
+    windowTitle: "app.mysouthchurch.org",
     description:
       "Multi-tenant backend platform managing organizational roles, volunteers, and directory services with automated cloud CI/CD.",
     highlights: [
@@ -62,25 +74,14 @@ const projects: Project[] = [
       "Firebase JWT",
       "GitHub Actions",
     ],
-    repoUrl: "https://github.com/M4rcosPROcv",
-  },
-  {
-    title: "Healthcare Prior Authorization Tool",
-    badge: "Modular Microservice",
-    affiliation: "NeighborHealth MVP",
-    description:
-      "Healthcare backend service streamlining medical authorization workflows, validation engines, and audit packet generation.",
-    highlights: [
-      "Engineered dynamic decision logic in FastAPI to verify clinical submission readiness",
-      "Collaborated in a modular service architecture with audit logging and structured packet creation",
-      "Documented and stress-tested endpoints with Swagger/OpenAPI and structured contract testing",
-    ],
-    tech: ["Python", "FastAPI", "SQL", "REST APIs", "Swagger/OpenAPI"],
+    repoUrl: "https://github.com/lucasbacchi/My-South-Church",
   },
   {
     title: "CinePraia Cinema Ticket Engine",
     badge: "Full-Stack Web App",
     affiliation: "Featured Project",
+    image: "/projects/cinepraia.png",
+    windowTitle: "cinepraia.cv",
     description:
       "Web application for cinema seat reservations, movie scheduling, and user booking transactions.",
     highlights: [
@@ -96,63 +97,106 @@ const projects: Project[] = [
       "React",
       "TypeScript",
     ],
-    repoUrl: "https://github.com/M4rcosPROcv",
   },
   {
     title: "Game Deals Tracker",
     badge: "Mobile & Async APIs",
     affiliation: "Android Systems",
+    image: "/projects/game-deals.png",
+    windowTitle: "deals-tracker-v1.0.apk",
+    isMobile: true,
     description:
       "Mobile data client querying real-time game pricing feeds across multiple digital storefronts.",
     highlights: [
       "Integrated Volley for asynchronous HTTP requests parsing 1,000+ real-time JSON discount feeds",
-      "Implemented local SQLite caching and persistence for user favorites and deal alert thresholds",
+      "Implemented local caching and persistence for user favorites and deal alert thresholds",
     ],
     tech: ["Kotlin", "Android SDK", "REST APIs", "Volley", "JSON"],
-    repoUrl: "https://github.com/M4rcosPROcv",
+    repoUrl: "https://github.com/M4rcosPROcv/GameDealsApp",
+  },
+  {
+    title: "Healthcare Prior Authorization Tool",
+    badge: "Modular Microservice",
+    affiliation: "NeighborHealth MVP",
+    description:
+      "Healthcare backend service streamlining medical authorization workflows, validation engines, and audit packet generation.",
+    highlights: [
+      "Engineered dynamic decision logic in FastAPI to verify clinical submission readiness",
+      "Collaborated in a modular service architecture with audit logging and structured packet creation",
+      "Documented and stress-tested endpoints with Swagger/OpenAPI and structured contract testing",
+    ],
+    tech: ["Python", "FastAPI", "SQL", "REST APIs", "Swagger/OpenAPI"],
+  },
+  {
+    title: "CVCash Digital Wallet & Ledger",
+    badge: "Fintech / Transaction Engine",
+    affiliation: "Financial Systems",
+    description:
+      "Fintech payment platform managing peer-to-peer balance transfers, wallet ledger states, and atomic transaction records.",
+    highlights: [
+      "Engineered ACID-compliant transaction routines to prevent double-spending and ensure balance consistency",
+      "Designed secure RESTful wallet management endpoints with token authentication and audit trails",
+      "Modeled relational schemas with optimized indexing for rapid balance ledger auditing and transaction lookups",
+    ],
+    tech: ["Java", "Spring Boot", "PostgreSQL", "REST APIs", "Docker"],
   },
 ];
 
 const journeySteps = [
   {
-    period: "Jun 2026 – Present",
+    period: "Sep 2026 – Present",
     role: "Information Systems & Technology Co-op",
     institution: "Adventist Community Services of Greater Washington",
     location: "Silver Spring, MD",
     type: "work",
-    description:
-      "Spearheaded custom form-parsing pipeline using PySide6 and Azure AI Document Intelligence to automate community client intake. Configured physical network drops and cabling infrastructure, modeled Power BI operational reports, and managed digital assets.",
+    description: [
+      "Architected an automated document intake tool using PySide6 and custom Azure AI Document Intelligence models, cutting intake processing time and reducing manual errors.",
+      "Diagnosed and deployed physical network drops and endpoint cabling, designed operational reports in Power BI, and developed digital media assets.",
+    ],
   },
   {
     period: "Jul 2026 – Aug 2026",
-    role: "Volunteer Coding Instructor (STEM Camp)",
-    institution: "ACSGW Youth Outreach",
+    role: "Volunteer Coding Instructor (STEM Summer Camp)",
+    institution: "ACSGW Youth Program",
     location: "Silver Spring, MD",
-    type: "leadership",
+    type: "volunteer",
     description:
       "Instructed 20+ elementary students (Grades 1–5) in computational logic, algorithm structure, and event-driven game scripting using MIT Scratch.",
   },
   {
-    period: "Fall 2025 – Expected May 2027",
+    period: "Fall 2025 – Expected Fall 2027",
     role: "B.S. in Computer Science",
     institution: "Wentworth Institute of Technology",
     location: "Boston, MA",
     type: "education",
-    description:
-      "Focusing on Distributed Systems, Cloud Architecture, Databases, and Concurrent Programming.",
+    description: [
+      "Deepening technical foundations in core systems and backend development.",
+      "Key coursework: Computer Networking, Algorithms, Software Engineering, Computer Organization, and Discrete Mathematics.",
+    ],
   },
   {
     period: "Sep 2023 – May 2025",
-    role: "A.S. in Computer Science & Academic Testing Proctor",
+    role: "A.S. in Computer Science",
     institution: "Bunker Hill Community College",
     location: "Boston, MA",
     type: "education",
     description:
-      "Graduated with Computer Science associate degree. Managed secure Pearson Vue and academic testing environments, strictly enforcing data compliance and testing integrity.",
+      "Graduated with foundational coursework in Data Structures, Object-Oriented Programming (Java/C++), SQL Programming, and Android Development prior to transferring to Wentworth.",
+  },
+  {
+    period: "Sep 2023 – May 2025",
+    role: "Academic Testing Proctor",
+    institution: "Bunker Hill Community College",
+    location: "Boston, MA",
+    type: "work",
+    description: [
+      "Managed high-volume, secure testing environments for hundreds of students across standardized testing sessions.",
+      "Enforced strict Pearson VUE exam guidelines, verified candidate identities, and maintained data integrity and testing compliance under pressure.",
+    ],
   },
   {
     period: "Spring 2024",
-    role: "3rd Place Winner — HACKBHCC Hackathon",
+    role: "3rd Place Winner — HACKBHCC2024 Hackathon",
     institution: "Bunker Hill Community College",
     location: "Boston, MA",
     type: "award",
@@ -279,8 +323,10 @@ const toolSkills: Skill[] = [
 ];
 
 export default function App() {
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
   return (
-    <div className="min-h-screen bg-[#030712] text-slate-100 font-sans selection:bg-teal-500 selection:text-white">
+    <div className="min-h-screen bg-[#030712] text-slate-100 font-sans selection:bg-teal-500 selection:text-white overflow-x-hidden">
       {/* Background Ambience */}
       <div className="fixed top-0 left-1/2 -translate-x-1/2 w-[700px] h-[350px] bg-teal-500/10 blur-[130px] pointer-events-none -z-10" />
 
@@ -289,14 +335,16 @@ export default function App() {
         <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
           <a
             href="#"
-            className="font-mono font-bold text-lg tracking-tight hover:opacity-80 transition-opacity"
+            className="font-mono font-bold text-lg tracking-tight hover:opacity-80 transition-opacity whitespace-nowrap"
           >
             <span className="bg-[linear-gradient(135deg,#2dd4bf,#007092)] bg-clip-text text-transparent">
               marcostavares.me
             </span>
             <span className="animate-pulse text-teal-300">_</span>
           </a>
-          <div className="flex items-center gap-6 text-sm font-mono text-slate-300">
+
+          {/* Desktop Nav Links */}
+          <div className="hidden md:flex items-center gap-6 text-sm font-mono text-slate-300">
             <a href="#about" className="hover:text-teal-400 transition-colors">
               About
             </a>
@@ -322,7 +370,57 @@ export default function App() {
               Contact
             </a>
           </div>
+
+          {/* Mobile Hamburger Button */}
+          <button
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            className="md:hidden p-2 text-slate-400 hover:text-teal-400 focus:outline-none"
+            aria-label="Toggle Navigation Menu"
+          >
+            {mobileMenuOpen ? <X size={22} /> : <Menu size={22} />}
+          </button>
         </div>
+
+        {/* Mobile Dropdown Menu */}
+        {mobileMenuOpen && (
+          <div className="md:hidden px-6 pt-2 pb-5 border-b border-slate-800 bg-[#030712]/95 backdrop-blur-xl flex flex-col gap-3 font-mono text-sm">
+            <a
+              href="#about"
+              onClick={() => setMobileMenuOpen(false)}
+              className="py-1.5 text-slate-300 hover:text-teal-400 transition-colors"
+            >
+              About
+            </a>
+            <a
+              href="#experience"
+              onClick={() => setMobileMenuOpen(false)}
+              className="py-1.5 text-slate-300 hover:text-teal-400 transition-colors"
+            >
+              Experience
+            </a>
+            <a
+              href="#projects"
+              onClick={() => setMobileMenuOpen(false)}
+              className="py-1.5 text-slate-300 hover:text-teal-400 transition-colors"
+            >
+              Projects
+            </a>
+            <a
+              href="#skills"
+              onClick={() => setMobileMenuOpen(false)}
+              className="py-1.5 text-slate-300 hover:text-teal-400 transition-colors"
+            >
+              Skills
+            </a>
+            <a
+              href="#contact"
+              onClick={() => setMobileMenuOpen(false)}
+              className="py-1.5 text-slate-300 hover:text-teal-400 transition-colors"
+            >
+              Contact
+            </a>
+          </div>
+        )}
       </nav>
 
       {/* Hero Section */}
@@ -470,6 +568,9 @@ export default function App() {
                   {step.type === "work" && (
                     <Briefcase size={16} className="text-teal-400" />
                   )}
+                  {step.type === "volunteer" && (
+                    <Users size={16} className="text-cyan-400" />
+                  )}
                   {step.type === "education" && (
                     <GraduationCap size={16} className="text-amber-400" />
                   )}
@@ -481,9 +582,22 @@ export default function App() {
                 <h4 className="text-sm font-mono text-slate-300 mb-3">
                   {step.institution}
                 </h4>
-                <p className="text-slate-400 text-sm leading-relaxed font-sans">
-                  {step.description}
-                </p>
+                <div className="space-y-2">
+                  {Array.isArray(step.description) ? (
+                    step.description.map((paragraph, pIdx) => (
+                      <p
+                        key={pIdx}
+                        className="text-slate-400 text-sm leading-relaxed font-sans"
+                      >
+                        {paragraph}
+                      </p>
+                    ))
+                  ) : (
+                    <p className="text-slate-400 text-sm leading-relaxed font-sans">
+                      {step.description}
+                    </p>
+                  )}
+                </div>
               </div>
             </div>
           ))}
@@ -511,6 +625,36 @@ export default function App() {
               className="p-6 rounded-2xl bg-slate-900/60 border border-slate-800 hover:border-slate-700 transition-colors flex flex-col justify-between"
             >
               <div>
+                {proj.image && (
+                  <div className="mb-4 overflow-hidden rounded-xl border border-slate-800 bg-slate-950/80 group">
+                    {/* Window Titlebar Header */}
+                    <div className="flex items-center gap-2 px-3.5 py-2.5 border-b border-slate-800 bg-slate-900/90">
+                      <span className="w-3 h-3 rounded-full bg-[#ff5f56] inline-block" />
+                      <span className="w-3 h-3 rounded-full bg-[#ffbd2e] inline-block" />
+                      <span className="w-3 h-3 rounded-full bg-[#27c93f] inline-block" />
+                      <span className="ml-2 text-xs font-mono text-slate-400">
+                        {proj.windowTitle || "application"}
+                      </span>
+                    </div>
+
+                    {/* Device Viewport */}
+                    {proj.isMobile ? (
+                      <div className="w-full h-48 sm:h-52 bg-slate-950 flex items-center justify-center p-2.5">
+                        <img
+                          src={proj.image}
+                          alt={proj.title}
+                          className="h-full max-h-[185px] w-auto object-contain rounded-md border border-slate-700/60 shadow-xl transition-transform duration-300 group-hover:scale-105"
+                        />
+                      </div>
+                    ) : (
+                      <img
+                        src={proj.image}
+                        alt={proj.title}
+                        className="w-full h-48 sm:h-52 object-cover object-top transition-transform duration-300 group-hover:scale-[1.02]"
+                      />
+                    )}
+                  </div>
+                )}
                 <div className="flex items-start justify-between gap-2 mb-2">
                   <div>
                     <span className="text-[11px] font-mono text-slate-500 block">
@@ -555,7 +699,7 @@ export default function App() {
                     </span>
                   ))}
                 </div>
-                {proj.repoUrl && (
+                {proj.repoUrl ? (
                   <a
                     href={proj.repoUrl}
                     target="_blank"
@@ -564,6 +708,10 @@ export default function App() {
                   >
                     Repository <ExternalLink size={12} />
                   </a>
+                ) : (
+                  <span className="text-xs text-slate-500 inline-flex items-center gap-1 font-mono">
+                    <Lock size={12} /> Private Repo
+                  </span>
                 )}
               </div>
             </div>
